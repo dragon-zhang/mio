@@ -41,6 +41,11 @@ cfg_os_ext! {
     pub(crate) mod named_pipe;
 }
 
+cfg_os_poll! {
+    mod source_socket;
+    pub use self::source_socket::SourceSocket;
+}
+
 mod waker;
 pub(crate) use waker::Waker;
 

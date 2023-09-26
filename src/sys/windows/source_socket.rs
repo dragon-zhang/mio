@@ -1,4 +1,5 @@
 use crate::{event, Interest, Registry, Token};
+use crate::io_source::IoSource;
 
 use std::io;
 use std::os::windows::io::RawSocket;
@@ -98,7 +99,7 @@ impl<'a> event::Source for SourceSocket<'a> {
         token: Token,
         interests: Interest,
     ) -> io::Result<()> {
-        registry.selector().register(self.0, token, interests)
+        IoSource::new(self.0).register(registry, token, interests)
     }
 
     fn reregister(
@@ -107,10 +108,10 @@ impl<'a> event::Source for SourceSocket<'a> {
         token: Token,
         interests: Interest,
     ) -> io::Result<()> {
-        registry.selector().reregister(self.0, token, interests)
+        IoSource::new(self.0).reregister(registry, token, interests)
     }
 
     fn deregister(&mut self, registry: &Registry) -> io::Result<()> {
-        registry.selector().deregister(self.0)
+        IoSource::new(self.0).deregister(registry)
     }
 }
